@@ -250,13 +250,13 @@ describe OmniAuth::Strategies::Facebook do
     it 'performs a GET to https://graph.facebook.com/me' do
       subject.stub(:access_token) { @access_token }
       @access_token.stub(:get) { double('OAuth2::Response').as_null_object }
-      @access_token.should_receive(:get).with('/me')
+      @access_token.should_receive(:get).with('/me', {})
       subject.raw_info
     end
 
     it 'returns a Hash' do
       subject.stub(:access_token) { @access_token }
-      @access_token.stub(:get).with('/me') do
+      @access_token.stub(:get).with('/me', {}) do
         raw_response = double('Faraday::Response')
         raw_response.stub(:body) { '{ "ohai": "thar" }' }
         raw_response.stub(:status) { 200 }
@@ -269,7 +269,7 @@ describe OmniAuth::Strategies::Facebook do
 
     it 'returns an empty hash when the response is false' do
       subject.stub(:access_token) { @access_token }
-      @access_token.stub(:get).with('/me') do
+      @access_token.stub(:get).with('/me', {}) do
         response = double('OAuth2::Response')
         response.stub(:parsed => false)
         response
